@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Display a map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://unpkg.com/maplibre-gl@2.1.9/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@2.1.9/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+var map = new maplibregl.Map({
+container: 'map', // container id
+style: 'https://demotiles.maplibre.org/style.json', // style URL
+center: [-67, -56], // starting position [lng, lat]
+zoom: 3 // starting zoom
+});
+
+
+import { GetCommand } from "@aws-sdk/lib-dynamodb";
+import { ddbDocClient } from "../libs/ddbDocClient.js";
+
+// Set the parameters.
+export const params = {
+  TableName: "TABLE_NAME",
+  Key: {
+    primaryKey: "VALUE_1",
+    sortKey: "VALUE_2",
+  },
+};
+
+export const getItem = async () => {
+  try {
+    const data = await ddbDocClient.send(new GetCommand(params));
+    console.log("Success :", data.Item);
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+getItem();
+
+
+
+
+var marker = new maplibregl.Marker()
+.setLngLat([-67, -56])
+.addTo(map);
+</script>
+ 
+</body>
+</html>
