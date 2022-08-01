@@ -12,7 +12,7 @@
 </style>
 </head>
 <body>
-<div id="map"></div>
+<div id="map">
 <script>
 var map = new maplibregl.Map({
 container: 'map', // container id
@@ -30,27 +30,20 @@ var popup = new maplibregl.Popup({ offset: 25 }).setText(
 //[-0.884341, -26.417997] // Buenos Aires coordinates: 34.6037° S, 58.3816° W
 //];
 	
-const apiName = 'ShipsAPI';
-const path = '/ship'; 
-};
-
-var coordinates = API.get(apiName, path, myInit)
-	
-API
-  .then(response => {
-    // Add your code here
-  })
-  .catch(error => {
-    console.log(error.response);
- });
-	
 var marker = new maplibregl.Marker()
-.setLngLat(coordinates)
+.setLngLat(
+	const apiName = 'ShipsAPI';
+	const path = '/ship'; 
+	};
+
+	return API.get(apiName, path, myInit);
+)
 .setPopup(popup) // sets a popup on this marker
 //maxBounds: bounds // Sets bounds as max
 .addTo(map);
 
 </script>
+</div>
  
 </body>
 </html>
