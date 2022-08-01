@@ -29,15 +29,9 @@ var popup = new maplibregl.Popup({ offset: 25 }).setText(
 //[-1.301991, -90.016892], // Santiago coordinates: 33.4489° S, 70.6693° W
 //[-0.884341, -26.417997] // Buenos Aires coordinates: 34.6037° S, 58.3816° W
 //];
-
-const apiName = 'ShipsAPI';
-const path = '/ship'; 
-};
-
-var coordinates = API.get(apiName, path);
 	
 var marker = new maplibregl.Marker()
-.setLngLat([coordinates])
+.setLngLat([-67, 56])
 .setPopup(popup) // sets a popup on this marker
 //maxBounds: bounds // Sets bounds as max
 .addTo(map);
