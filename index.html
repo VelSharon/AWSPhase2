@@ -30,8 +30,12 @@ var popup = new maplibregl.Popup({ offset: 25 }).setText(
 //[-0.884341, -26.417997] // Buenos Aires coordinates: 34.6037° S, 58.3816° W
 //];
 	
+const rawdata = https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/prod/get_all_data;
+const latitude = JSON.parse(rawdata.Items[0].latitude);
+const longitude = JSON.parse(rawdata.Items[0].longitude);
+	
 var marker = new maplibregl.Marker()
-.setLngLat([-67, 56])
+.setLngLat([longitude, latitude])
 .setPopup(popup) // sets a popup on this marker
 //maxBounds: bounds // Sets bounds as max
 .addTo(map);
