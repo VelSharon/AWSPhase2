@@ -21,26 +21,10 @@ center: [-67, -56], // starting position [lng, lat]
 zoom: 3 // starting zoom
 });
 
-const apiName = 'ShipsAPI';
-const path = '/ship'; 
-const myInit = { // OPTIONAL
-    headers: {}, // OPTIONAL
-    response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
-    queryStringParameters: {  // OPTIONAL
-        name: 'param',
-    },
-};
-
-API
-  coordinates = .get(apiName, path, myInit)
-  .then(response => {
-    var marker = new maplibregl.Marker()
-    .setLngLat(coordinates)
-    .addTo(map);
-  })
-  .catch(error => {
-    console.log(error.response);
- });
+var marker = new maplibregl.Marker()
+const coordinates = "https://5igbjsej3a.execute-api.us-east-1.amazonaws.com/prod"
+.setLngLat(coordinates)
+.addTo(map);
 
 </script>
  
