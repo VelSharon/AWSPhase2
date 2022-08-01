@@ -21,9 +21,13 @@ center: [-67, -56], // starting position [lng, lat]
 zoom: 3 // starting zoom
 });
 
-var marker = new maplibregl.Marker()
-const coordinates = "https://5igbjsej3a.execute-api.us-east-1.amazonaws.com/prod"
-.setLngLat(coordinates)
+var popup = new maplibregl.Popup({ offset: 25 }).setText(
+'Add favorite'
+);
+	
+var marker = new maplibregl.Marker()	
+.setLngLat([-56, -67])
+.setPopup(popup) // sets a popup on this marker
 .addTo(map);
 
 </script>
