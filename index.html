@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html
 <head>
 <meta charset="utf-8" />
 <title>User Interface</title>
@@ -9,38 +9,268 @@
 <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+td {
+  text-align: center;
+}
+
+td:first-child {
+  font-weight: bold
+}
 </style>
 </head>
+
 <body>
 	<div id="map"></div>
-<script>
-var map = new maplibregl.Map({
-container: 'map', // container id
-style: 'https://demotiles.maplibre.org/style.json', // style URL
-center: [-67, -56], // starting position [lng, lat]
-zoom: 3 // starting zoom
-});
+	<div id="map">
+	<table style="width: 20%">
+	<!--Heading-->
+	<tr bgcolor = "teal">
+		<td><b>Position</b></td>
+		<td><b>Name/ID</b></td>
+		<td><b>Speed (knots)</b></td>
+		<td><b>Distance from Finish (Miles)</b></td>
+	</tr>
+	<!--1st place-->
+	<tr bgcolor = "white">
+		<td>1st</td>
+		<td><p id = "1st ID"></p></td>
+		<td><p id = "1st Speed"></p</td>
+		<td><p id = "1st Distance"></p</td>
+	</tr>
+	<!--2nd place-->
+	<tr bgcolor = "silver">
+		<td>2nd</td>
+		<td><p id = "2nd ID"></p></td>
+		<td><p id = "2nd Speed"></p</td>
+		<td><p id = "2nd Distance"></p</td>
+	</tr>
+	<!-- 3rd place-->
+	<tr bgcolor = "white">
+		<td>3rd</td>
+		<td><p id = "3rd ID"></p></td>
+		<td><p id = "3rd Speed"></p</td>
+		<td><p id = "3rd Distance"></p</td>
+	</tr>
+	<!-- 4th place-->
+	<tr bgcolor = "silver">
+		<td>4th</td>
+		<td><p id = "4th ID"></p></td>
+		<td><p id = "4th Speed"></p</td>
+		<td><p id = "4th Distance"></p</td>
+	</tr>
+		<!-- 5th place-->
+	<tr bgcolor = "white">
+		<td>5th</td>
+		<td><p id = "5th ID"></p></td>
+		<td><p id = "5th Speed"></p</td>
+		<td><p id = "5th Distance"></p</td>
+	</tr>
+		<!-- 5th place-->
+	<tr bgcolor = "silver">
+		<td>6th</td>
+		<td><p id = "6th ID"></p></td>
+		<td><p id = "6th Speed"></p</td>
+		<td><p id = "6th Distance"></p</td>
+	</tr>
+		<!-- 7th place-->
+	<tr bgcolor = "white">
+		<td>7th</td>
+		<td><p id = "7th ID"></p></td>
+		<td><p id = "7th Speed"></p</td>
+		<td><p id = "7th Distance"></p</td>
+	</tr>
+		<!-- 5th place-->
+	<tr bgcolor = "silver">
+		<td>8th</td>
+		<td><p id = "8th ID"></p></td>
+		<td><p id = "8th Speed"></p</td>
+		<td><p id = "8th Distance"></p</td>
+	</tr>
+		<!-- 5th place-->
+	<tr bgcolor = "white">
+		<td>9th</td>
+		<td><p id = "9th ID"></p></td>
+		<td><p id = "9th Speed"></p</td>
+		<td><p id = "9th Distance"></p</td>
+	</tr>
+		<!-- 10th place-->
+	<tr bgcolor = "silver">
+		<td>10th</td>
+		<td><p id = "10th ID"></p></td>
+		<td><p id = "10th Speed"></p</td>
+		<td><p id = "10th Distance"></p</td>
+	</tr>	
+</table>	
 
-var popup = new maplibregl.Popup({ offset: 25 }).setText(
-'Add favorite'
-);
-
-//var bounds = [
-//[-1.301991, -90.016892], // Santiago coordinates: 33.4489° S, 70.6693° W
-//[-0.884341, -26.417997] // Buenos Aires coordinates: 34.6037° S, 58.3816° W
-//];
 	
-const rawdata = https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/prod/get_all_data;
-const latitude = JSON.parse(rawdata.Items[0].latitude);
-const longitude = JSON.parse(rawdata.Items[0].longitude);
 	
-var marker = new maplibregl.Marker()
-.setLngLat([longitude, latitude])
-.setPopup(popup) // sets a popup on this marker
-//maxBounds: bounds // Sets bounds as max
-.addTo(map);
+<script> 
+//Restrict bounds
+var bounds = [
+[-87.01228768336995, -59.90750046116626], // Southwest coordinates
+[-51.570396093178395, -36.40278420944681] // Northeast coordinates
+	];	
 
-</script>
- 
+// Set Map
+	var map = new maplibregl.Map({
+	container: 'map', // container id
+	style: 'https://demotiles.maplibre.org/style.json', // style URL
+	center: [-67, -56], // starting position [lng, lat]
+	zoom: 3, // starting zoom
+	maxBounds: bounds
+	});
+
+// Set Start/Finish Markers
+		var marker = new maplibregl.Marker({
+		color: "#07f73f",})
+		.setLngLat([-78.1133626248922, -54.05531909296149])
+		.addTo(map);
+
+		var marker = new maplibregl.Marker({
+		color: "#07f73f",})
+		.setLngLat([-59.52449694718313, -52.23701137917236])
+		.addTo(map);
+	
+	
+//Function for API GW
+async function fetchText() {	
+	let response = await fetch(
+        "https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/dev/get_all_data"
+      );
+    let data = await response.json();
+	  
+  
+//Loop through all entries
+	for (var i = 0; i < data.Count; i++) {
+        item = data.Items[i];
+		var marker = new maplibregl.Marker()
+		.setLngLat([item.longitude,item.latitude])
+		.addTo(map);
+		//console.log(data.Items);
+		//console.log(data.Count);
+      }	 
+
+//////////////////////
+//Check Distance
+const firstdistance = [];
+for(i = 0; i < data.Items.length; i++)
+{
+	firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-52.23701137917236, -59.52449694718313);
+	 // console.log(data.Items[i].longitude,data.Items[i].latitude,firstdistance); 
+};
+//////////////////////
+
+//////////////////////
+//Sort the Leaderboard by distance
+function leaderSort(data,distance){
+for(let i = 0; i < distance.length; i++){
+	for(let j = 0; j < distance.length - i - 1; j++){
+		if(distance[j+1] < distance[j]){
+		[data.Items[j+1],data.Items[j]] = [data.Items[j],data.Items[j+1]],
+		[distance[j+1],distance[j]] = [distance[j],distance[j+1]]
+			}
+			}
+	};
+	return data;
+}
+sorted = leaderSort(data,firstdistance);
+//////////////////////
+
+//////////////////////
+//Sort Distance
+console.log(sorted);
+function distanceSort(distance)
+{
+for(let i = 0; i < distance.length; i++){
+	for(let j = 0; j < distance.length - i - 1; j++){
+		if(distance[j+1] < distance[j]){
+		[distance[j+1],distance[j]] = [distance[j],distance[j+1]]
+			}	
+		}
+	};
+	return distance;
+}
+console.log(firstdistance[i]);
+finaldistance = distanceSort(firstdistance);
+//////////////////////
+
+
+
+/////////////////////////////
+//Distance Calculator
+/////////////////////////////	  
+function distance(lat1, lon1, lat2, lon2) 
+   {
+      var R = 6371; // km
+      var dLat = toRad(lat2-lat1);
+      var dLon = toRad(lon2-lon1);
+      var lat1 = toRad(lat1);
+      var lat2 = toRad(lat2);
+
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c;
+      return d.toFixed(2);
+    }
+
+    // Converts numeric degrees to radians
+    function toRad(Value) 
+    {
+        return Value * Math.PI / 180;
+    }
+	
+//Calculate distance for leaderboard
+/*const finaldistance = [];
+for(i = 0; i < 10; i++)
+{
+	finaldistance[i] = distance(sorted.Items[i].latitude,sorted.Items[i].longitude,-52.23701137917236, -59.52449694718313);
+	  console.log(sorted.Items[i].longitude,sorted.Items[i].latitude,finaldistance); 
+};*/
+
+	  
+// Send to Leaderboard
+    document.getElementById('1st ID').innerHTML = [sorted.Items[0].name + " - #" + sorted.Items[0].id];
+	document.getElementById('2nd ID').innerHTML = [sorted.Items[1].name + " - #" + sorted.Items[1].id];
+	document.getElementById('3rd ID').innerHTML = [sorted.Items[2].name + " - #" + sorted.Items[2].id];
+	document.getElementById('4th ID').innerHTML = [sorted.Items[3].name + " - #" + sorted.Items[3].id];
+	document.getElementById('5th ID').innerHTML = [sorted.Items[4].name + " - #" + sorted.Items[4].id];
+	document.getElementById('6th ID').innerHTML = [sorted.Items[5].name + " - #" + sorted.Items[5].id];
+	document.getElementById('7th ID').innerHTML = [sorted.Items[6].name + " - #" + sorted.Items[6].id];
+	document.getElementById('8th ID').innerHTML = [sorted.Items[7].name + " - #" + sorted.Items[7].id];
+	document.getElementById('9th ID').innerHTML = [sorted.Items[8].name + " - #" + sorted.Items[8].id];
+	document.getElementById('10th ID').innerHTML = [sorted.Items[9].name + " - #" + sorted.Items[9].id];
+	
+	document.getElementById('1st Speed').innerHTML = sorted.Items[0].shipspeed;
+	document.getElementById('2nd Speed').innerHTML = sorted.Items[1].shipspeed;
+	document.getElementById('3rd Speed').innerHTML = sorted.Items[2].shipspeed;
+	document.getElementById('4th Speed').innerHTML = sorted.Items[3].shipspeed;
+	document.getElementById('5th Speed').innerHTML = sorted.Items[4].shipspeed;
+	document.getElementById('6th Speed').innerHTML = sorted.Items[5].shipspeed;
+	document.getElementById('7th Speed').innerHTML = sorted.Items[6].shipspeed;
+	document.getElementById('8th Speed').innerHTML = sorted.Items[7].shipspeed;
+	document.getElementById('9th Speed').innerHTML = sorted.Items[8].shipspeed;
+	document.getElementById('10th Speed').innerHTML = sorted.Items[9].shipspeed;
+
+	document.getElementById('1st Distance').innerHTML = finaldistance[0];
+	document.getElementById('2nd Distance').innerHTML = finaldistance[1];
+	document.getElementById('3rd Distance').innerHTML = finaldistance[2];
+	document.getElementById('4th Distance').innerHTML = finaldistance[3];
+	document.getElementById('5th Distance').innerHTML = finaldistance[4];
+	document.getElementById('6th Distance').innerHTML = finaldistance[5];
+	document.getElementById('7th Distance').innerHTML = finaldistance[6];
+	document.getElementById('8th Distance').innerHTML = finaldistance[7];
+	document.getElementById('9th Distance').innerHTML = finaldistance[8];
+	document.getElementById('10th Distance').innerHTML = finaldistance[9];	
+	
+}
+
+fetchText();
+
+   //Refresh the page every 5 seconds
+   setInterval(fetchText, 5000);
+    </script>
 </body>
 </html>
+
+
