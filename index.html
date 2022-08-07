@@ -240,7 +240,8 @@ console.log(racers);
 const firstdistance = [];
 for(i = 0; i < data.Items.length; i++)
 {
-	firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-52.23701137917236, -59.52449694718313);
+	//firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-52.23701137917236, -59.52449694718313); this is endpoint coordinate of falkland islands
+	firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-35.18496853368257, -57.763539882910656); //coordinate of finish line
 	 // console.log(data.Items[i].longitude,data.Items[i].latitude,firstdistance); 
 };
 //////////////////////
