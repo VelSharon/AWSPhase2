@@ -18,71 +18,72 @@ td:first-child {
 }
 </style>
 
+
 <style>
 
-	* {
-	  box-sizing: border-box;
-	}
-	
-	body {
-	  font: 16px Arial;  
-	}
-	
-	/*the container must be positioned relative:*/
-	.autocomplete {
-	  position: relative;
-	  display: inline-block;
-	}
-	
-	input {
-	  border: 1px solid transparent;
-	  background-color: #f1f1f1;
-	  padding: 10px;
-	  font-size: 16px;
-	}
-	
-	input[type=text] {
-	  background-color: #f1f1f1;
-	  width: 100%;
-	}
-	
-	input[type=submit] {
-	  background-color: DodgerBlue;
-	  color: #fff;
-	  cursor: pointer;
-	}
-	
-	.autocomplete-items {
-	  position: absolute;
-	  border: 1px solid #d4d4d4;
-	  border-bottom: none;
-	  border-top: none;
-	  z-index: 99;
-	  /*position the autocomplete items to be the same width as the container:*/
-	  top: 100%;
-	  left: 0;
-	  right: 0;
-	}
-	
-	.autocomplete-items div {
-	  padding: 10px;
-	  cursor: pointer;
-	  background-color: #fff; 
-	  border-bottom: 1px solid #d4d4d4; 
-	}
-	
-	/*when hovering an item:*/
-	.autocomplete-items div:hover {
-	  background-color: #e9e9e9; 
-	}
-	
-	/*when navigating through the items using the arrow keys:*/
-	.autocomplete-active {
-	  background-color: DodgerBlue !important; 
-	  color: #ffffff; 
-	}
-	</style>
-	
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px Arial;  
+}
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+</style>
+
 </head>
 
 <body>
@@ -182,14 +183,14 @@ td:first-child {
 //Restrict bounds
 //var bounds = [
 //[-87.01228768336995, -59.90750046116626], // Southwest coordinates
-//[-51.570396093178395, -36.40278420944681] // Northeast coordinates
+//[-51.570396093178395, -46.40278420944681] // Northeast coordinates
 //	];	
 
 //Restrict bounds
 var bounds = [
-[-111.71038161841992,-62.085467994116726], // Southwest coordinates
+[-111.71038161841992, -62.085467994116726], // Southwest coordinates
 [-35.684997168215055, -21.416444812434985] // Northeast coordinates
-	];
+    ]; 
 
 // Set Map
 	var map = new maplibregl.Map({
@@ -215,11 +216,12 @@ var bounds = [
 //Function for API GW
 async function fetchText() {	
 	let response = await fetch(
-        "https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/dev/get_all_data"
+        //"https://n0bztunihb.execute-api.us-east-1.amazonaws.com/1/get_all"
+		"https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/dev/get_all_data"
       );
     let data = await response.json();
 	  
-  
+ var racers =[];
 //Loop through all entries
 	for (var i = 0; i < data.Count; i++) {
         item = data.Items[i];
@@ -228,8 +230,9 @@ async function fetchText() {
 		.addTo(map);
 		//console.log(data.Items);
 		//console.log(data.Count);
+		racers[i] = (data.Items[i].name + " - #" + data.Items[i].id);				
       }	 
-
+console.log(racers);
 //////////////////////
 //Check Distance
 const firstdistance = [];
@@ -258,7 +261,6 @@ sorted = leaderSort(data,firstdistance);
 
 //////////////////////
 //Sort Distance
-console.log(sorted);
 function distanceSort(distance)
 {
 for(let i = 0; i < distance.length; i++){
@@ -270,11 +272,9 @@ for(let i = 0; i < distance.length; i++){
 	};
 	return distance;
 }
-console.log(firstdistance[i]);
+
 finaldistance = distanceSort(firstdistance);
 //////////////////////
-
-
 
 /////////////////////////////
 //Distance Calculator
@@ -342,8 +342,8 @@ for(i = 0; i < 10; i++)
 	document.getElementById('8th Distance').innerHTML = finaldistance[7];
 	document.getElementById('9th Distance').innerHTML = finaldistance[8];
 	document.getElementById('10th Distance').innerHTML = finaldistance[9];	
-	
-	function autocomplete(inp, arr) {
+
+  function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
   var currentFocus;
@@ -450,7 +450,7 @@ fetchText();
    //Refresh the page every 5 seconds
    setInterval(fetchText, 5000);
     </script>
+	
 </body>
 </html>
-
 
