@@ -95,7 +95,7 @@ input[type=submit] {
 		<td><b>Position</b></td>
 		<td><b>Name/ID</b></td>
 		<td><b>Speed (knots)</b></td>
-		<td><b>Distance from Finish (Miles)</b></td>
+		<td><b>Distance from Finish (KM)</b></td>
 	</tr>
 	<!--1st place-->
 	<tr bgcolor = "white">
@@ -181,16 +181,10 @@ input[type=submit] {
 	
 <script> 
 //Restrict bounds
-//var bounds = [
-//[-87.01228768336995, -59.90750046116626], // Southwest coordinates
-//[-51.570396093178395, -46.40278420944681] // Northeast coordinates
-//	];	
-
-//Restrict bounds
 var bounds = [
 [-111.71038161841992, -62.085467994116726], // Southwest coordinates
 [-35.684997168215055, -21.416444812434985] // Northeast coordinates
-    ]; 
+	];	
 
 // Set Map
 	var map = new maplibregl.Map({
@@ -204,46 +198,49 @@ var bounds = [
 // Set Start/Finish Markers
 		var marker = new maplibregl.Marker({
 		color: "#07f73f",})
-		//.setLngLat([-78.1133626248922, -54.05531909296149])
-		.setLngLat([-70.6021105425879, -33.60563995472855])
+		.setLngLat([-71.59075218524546, -32.94946313262731])
 		.addTo(map);
 
 		var marker = new maplibregl.Marker({
 		color: "#07f73f",})
-		//.setLngLat([-59.52449694718313, -52.23701137917236])
-		.setLngLat([-57.763539882910656, -35.18496853368257])
+		.setLngLat([-58.459326207092865, -34.274853433007415])
 		.addTo(map);
 	
 	
 //Function for API GW
 async function fetchText() {	
 	let response = await fetch(
-        //"https://n0bztunihb.execute-api.us-east-1.amazonaws.com/1/get_all"
-		"https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/dev/get_all_data"
+        "https://cai1fd3yg6.execute-api.us-east-1.amazonaws.com/dev/get_all_data"
       );
     let data = await response.json();
+
+var botLon = -69.18968667511274;
+var botLat = -55.5207390654453;
 	  
- var racers =[];
+var racers =[];
 //Loop through all entries
 	for (var i = 0; i < data.Count; i++) {
         item = data.Items[i];
 		var marker = new maplibregl.Marker()
 		.setLngLat([item.longitude,item.latitude])
 		.addTo(map);
-		//console.log(data.Items);
-		//console.log(data.Count);
 		racers[i] = (data.Items[i].name + " - #" + data.Items[i].id);				
       }	 
-console.log(racers);
 //////////////////////
 //Check Distance
 const firstdistance = [];
 for(i = 0; i < data.Items.length; i++)
 {
-	//firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-52.23701137917236, -59.52449694718313); this is endpoint coordinate of falkland islands
-	firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-35.18496853368257, -57.763539882910656); //coordinate of finish line
-	 // console.log(data.Items[i].longitude,data.Items[i].latitude,firstdistance); 
+	if (data.Items[i].longitude < botLon)
+	{
+	firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,botLat,botLon);
+	firstdistance[i] = parseInt(firstdistance[i]) + 2500;
+	  }
+	 else{
+	 firstdistance[i] = distance(data.Items[i].latitude,data.Items[i].longitude,-34.485765559353034, -58.34838192900564);
+	 }
 };
+
 //////////////////////
 
 //////////////////////
@@ -252,14 +249,26 @@ function leaderSort(data,distance){
 for(let i = 0; i < distance.length; i++){
 	for(let j = 0; j < distance.length - i - 1; j++){
 		if(distance[j+1] < distance[j]){
+		console.log("Before");
+		console.log("Lower  ", distance[j], ":", data.Items[j].name, " Higher ",   distance[j+1], ":", data.Items[j+1].name,);
 		[data.Items[j+1],data.Items[j]] = [data.Items[j],data.Items[j+1]],
 		[distance[j+1],distance[j]] = [distance[j],distance[j+1]]
+		console.log("After");
+		
+		for(let i = 0; i < distance.length; i++){
+		console.log("Distance:", distance[i], "Name:", data.Items[i].name);
+		}
+		
+				console.log("After");
+		console.log("Lower  ", distance[j], ":", data.Items[j].name, " Higher ",   distance[j+1], ":", data.Items[j+1].name,);
 			}
 			}
 	};
 	return data;
 }
+
 sorted = leaderSort(data,firstdistance);
+console.log(sorted);
 //////////////////////
 
 //////////////////////
@@ -294,7 +303,7 @@ function distance(lat1, lon1, lat2, lon2)
         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
       var d = R * c;
-      return d.toFixed(2);
+      return d.toFixed(0);
     }
 
     // Converts numeric degrees to radians
@@ -451,9 +460,11 @@ autocomplete(document.getElementById("myInput"), racers);
 fetchText();
 
    //Refresh the page every 5 seconds
-   setInterval(fetchText, 5000);
+   //setInterval(fetchText, 5000);
     </script>
 	
 </body>
 </html>
+
+
 
